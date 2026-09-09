@@ -362,7 +362,7 @@
       <div class="eyebrow">SENTINEL VAULT ACCESS</div>
       <h1>BÓVEDA GTG</h1>
       <div class="hero-gem"><img src="assets/gema-hero.jpg" alt="Gema de Guarding the Globe"></div>
-      <p>Tres recompensas exclusivas, activadas por tu Centinela personal.<br>Elige una categoría para ver lo disponible este mes.</p>
+      <p>Recompensas gratuitas solo para vos, activadas por tu Centinela personal.<br>Elige una categoría para ver lo disponible este mes.</p>
     </div>
 
     <div id="home-lock-banner"></div>
@@ -375,13 +375,13 @@
 
     <button class="panel cat-btn" onclick="goTo('gemas')">
       <div class="icon">💎</div>
-      <div class="label"><strong>Gemas</strong><span>Cofres de gemas violeta</span></div>
+      <div class="label"><strong>Gemas</strong><span>Cofres de gemas</span></div>
       <div class="arrow">›</div>
     </button>
 
     <button class="panel cat-btn" onclick="goTo('fugaz')">
       <div class="icon">🕓</div>
-      <div class="label"><strong>Oferta fugaz</strong><span>Sube tu propia propuesta</span></div>
+      <div class="label"><strong>Oferta fugaz</strong><span>Sube captura de la oferta</span></div>
       <div class="arrow">›</div>
     </button>
 
@@ -436,7 +436,7 @@
   <section id="screen-gemas" class="screen">
     <button class="back-btn" onclick="goTo('home')">‹ Volver</button>
     <div class="screen-title">Gemas</div>
-    <div class="screen-sub">Cofres de gemas violeta de la ADG.</div>
+    <div class="screen-sub">Cofres de gemas de la ADG.</div>
     <div id="gemas-lock-banner"></div>
 
     <div class="panel offer-card">
@@ -465,7 +465,7 @@
   <section id="screen-fugaz" class="screen">
     <button class="back-btn" onclick="goTo('home')">‹ Volver</button>
     <div class="screen-title">Oferta fugaz</div>
-    <div class="screen-sub">Una recompensa por tiempo limitado. Sube una captura de lo que se te ocurra y reclámala.</div>
+    <div class="screen-sub">Una recompensa por tiempo limitado. Muestráme la oferta y reclámala.</div>
     <div id="fugaz-lock-banner"></div>
 
     <div id="fugaz-form-wrap" class="panel offer-card">
@@ -498,19 +498,19 @@
 <!-- Overlay de éxito -->
 <div class="success-overlay" id="success-overlay">
   <h2>¡RECLAMADO!</h2>
-  <p id="success-text">Tu recompensa fue registrada y ya está en camino.</p>
+  <p id="success-text">Tu recompensa fue registrada y ya está en camino. Deja que tu novia se encargue del resto ❤︎⁠.</p>
 </div>
 
 <script>
 /* ======================================================
    👉 CONFIGURA AQUÍ TUS DATOS DE EMAILJS (emailjs.com)
    ====================================================== */
-const EMAILJS_PUBLIC_KEY  = "TU_PUBLIC_KEY";
-const EMAILJS_SERVICE_ID  = "TU_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID";
+const EMAILJS_PUBLIC_KEY  = "wWq6HkQQ16oMkExhb";
+const EMAILJS_SERVICE_ID  = "service_w3fd9v8";
+const EMAILJS_TEMPLATE_ID = "template_sf1zx63";
 const NOTIFY_EMAIL        = "invinciblegtgcupons@gmail.com";
 
-if (window.emailjs && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY") {
+if (window.emailjs && EMAILJS_PUBLIC_KEY !== "wWq6HkQQ16oMkExhb") {
   emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 }
 
@@ -673,7 +673,7 @@ function confirmClaim(){
    ENVÍO DE CORREO (EmailJS)
    ====================================================== */
 function sendClaimEmail(id, offer){
-  if (!window.emailjs || EMAILJS_PUBLIC_KEY === "TU_PUBLIC_KEY") {
+  if (!window.emailjs || EMAILJS_PUBLIC_KEY === "wWq6HkQQ16oMkExhb") {
     console.warn("EmailJS no está configurado todavía. Revisa las variables al inicio del script.");
     return;
   }
