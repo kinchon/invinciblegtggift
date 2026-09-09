@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bóveda GTG</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  :root{
+    --bg-deep:#070a1f;
+    --bg-deep-2:#0d1230;
+    --panel:#121a3d;
+    --panel-2:#182252;
+    --line:#2a3568;
+    --gold:#d9a441;
+    --gold-light:#f6d989;
+    --purple:#b93fe0;
+    --purple-light:#e9b8ff;
+    --text:#eef0ff;
+    --text-dim:#9aa3c9;
+    --success:#57e08c;
+    --locked:#5c6690;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(185,63,224,0.25), transparent 60%),
+      radial-gradient(ellipse at 90% 100%, rgba(217,164,65,0.12), transparent 55%),
+      linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-deep-2) 100%);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:'Manrope', sans-serif;
+    padding:0 0 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:480px; margin:0 auto; padding:28px 20px;}
+
+  h1,h2,h3{font-family:'Orbitron', sans-serif; margin:0; letter-spacing:0.02em;}
+
+  .brand{
+    text-align:center;
+    margin-bottom:28px;
+  }
+  .brand .eyebrow{
+    color:var(--purple-light);
+    font-size:13px;
+    letter-spacing:0.14em;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .brand h1{
+    font-size:26px;
+    font-weight:800;
+    background:linear-gradient(120deg, var(--gold-light), var(--gold) 45%, var(--purple-light));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .brand p{
+    color:var(--text-dim);
+    font-size:14px;
+    margin-top:8px;
+    line-height:1.5;
+  }
+
+  .hero-gem{
+    width:170px;
+    height:170px;
+    margin:8px auto 4px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero-gem::before{
+    content:"";
+    position:absolute;
+    inset:-30px;
+    background:radial-gradient(circle, rgba(185,63,224,0.45), transparent 70%);
+    filter:blur(6px);
+    animation:pulse 3.4s ease-in-out infinite;
+  }
+  .hero-gem img{
+    position:relative;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    filter:drop-shadow(0 0 18px rgba(217,164,65,0.5));
+  }
+  @keyframes pulse{
+    0%,100%{transform:scale(1); opacity:0.8;}
+    50%{transform:scale(1.12); opacity:1;}
+  }
+
+  /* panel con esquinas cortadas, estilo tech */
+  .panel{
+    background:linear-gradient(160deg, var(--panel), var(--panel-2));
+    border:1px solid var(--line);
+    clip-path:polygon(0 14px, 14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+    position:relative;
+  }
+  .panel::after{
+    content:"";
+    position:absolute; inset:0;
+    clip-path:polygon(0 14px, 14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+    border:1px solid transparent;
+    pointer-events:none;
+  }
+
+  .cat-btn{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    padding:18px 20px;
+    margin-bottom:14px;
+    cursor:pointer;
+    text-align:left;
+    color:var(--text);
+    font-family:'Manrope', sans-serif;
+    transition:transform 0.15s ease, border-color 0.15s ease;
+  }
+  .cat-btn:active{transform:scale(0.98);}
+  .cat-btn:hover{border-color:var(--gold);}
+  .cat-btn .icon{
+    width:44px; height:44px;
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+    background:rgba(217,164,65,0.12);
+    flex-shrink:0;
+  }
+  .cat-btn .label{flex:1;}
+  .cat-btn .label strong{display:block; font-size:16px; font-weight:700;}
+  .cat-btn .label span{display:block; font-size:12.5px; color:var(--text-dim); margin-top:2px;}
+  .cat-btn .arrow{color:var(--gold); font-size:18px;}
+
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  .back-btn{
+    background:none; border:none; color:var(--gold-light);
+    font-family:'Manrope', sans-serif; font-weight:600; font-size:14px;
+    cursor:pointer; padding:0; margin-bottom:18px;
+    display:flex; align-items:center; gap:6px;
+  }
+
+  .screen-title{
+    font-size:20px; font-weight:800; margin-bottom:4px;
+  }
+  .screen-sub{color:var(--text-dim); font-size:13.5px; margin-bottom:20px; line-height:1.5;}
+
+  .offer-grid{
+    display:flex;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .offer-grid .offer-card{
+    flex:1;
+    min-width:0;
+    margin-bottom:0;
+  }
+
+  /* En celulares angostos, las 2 tarjetas de potenciadores vuelven
+     a apilarse una arriba de la otra para no quedar apretadas. */
+  @media (max-width: 420px){
+    .offer-grid{
+      flex-direction:column;
+    }
+  }
+
+  .offer-card{
+    padding:0 0 18px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  /* "Lienzo" donde entra la imagen. Cambiá la altura (180px) para agrandar
+     o achicar el recuadro; el ancho siempre es el 100% de la tarjeta. */
+  .offer-card .img-box{
+    width:100%;
+    height:180px;
+    background:var(--bg-deep-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .offer-card .img-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain; /* muestra la imagen completa, sin recortarla */
+    display:block;
+  }
+  .offer-card .body{padding:16px 18px 0;}
+  .offer-card h3{font-size:15.5px; margin-bottom:8px;}
+  .offer-card .meta{
+    display:flex; justify-content:space-between; align-items:center;
+    margin:14px 0 4px;
+  }
+  .offer-card .qty{
+    font-size:12.5px; color:var(--purple-light); font-weight:600;
+  }
+
+  .price-row{
+    display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;
+  }
+  .price-btn{
+    flex:1;
+    min-width:130px;
+    background:linear-gradient(160deg, #1c2758, #131c44);
+    border:1px solid var(--gold);
+    border-radius:10px;
+    padding:12px 10px;
+    text-align:center;
+    cursor:pointer;
+    color:var(--text);
+    font-family:'Manrope', sans-serif;
+  }
+  .price-btn .tag{display:block; font-size:11px; color:var(--text-dim); margin-bottom:4px;}
+  .price-btn .amount{display:block; font-size:17px; font-weight:800; color:var(--success);}
+  .price-btn.mega{border-color:var(--purple);}
+  .price-btn.mega .amount{color:var(--purple-light);}
+  .price-btn:disabled{
+    opacity:0.5; cursor:not-allowed; border-color:var(--locked);
+  }
+  .price-btn:disabled .amount{color:var(--locked);}
+  .price-btn .lock-note{
+    display:block; font-size:10.5px; color:var(--locked); margin-top:4px;
+  }
+
+  .lock-banner{
+    background:rgba(92,102,144,0.18);
+    border:1px solid var(--locked);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13px;
+    color:var(--text-dim);
+    margin-bottom:18px;
+    line-height:1.5;
+  }
+
+  textarea, input[type="text"]{
+    width:100%;
+    background:var(--bg-deep-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    color:var(--text);
+    font-family:'Manrope', sans-serif;
+    font-size:14px;
+    padding:12px 14px;
+    margin-bottom:14px;
+    resize:vertical;
+  }
+
+  .upload-box{
+    border:2px dashed var(--line);
+    border-radius:10px;
+    padding:22px 16px;
+    text-align:center;
+    margin-bottom:14px;
+    cursor:pointer;
+    color:var(--text-dim);
+    font-size:13.5px;
+  }
+  .upload-box.has-file{border-color:var(--success); color:var(--success);}
+  .upload-box input{display:none;}
+  .preview-img{
+    max-width:100%; max-height:180px; border-radius:10px; margin-top:12px; display:none;
+  }
+
+  .primary-btn{
+    width:100%;
+    background:linear-gradient(120deg, var(--gold), var(--gold-light));
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    font-family:'Orbitron', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:0.03em;
+    color:#1b1204;
+    cursor:pointer;
+  }
+  .primary-btn:disabled{background:var(--locked); color:#e2e5f5; cursor:not-allowed;}
+
+  /* Modal de confirmación */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(4,6,20,0.78);
+    backdrop-filter:blur(3px);
+    display:none;
+    align-items:center; justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .overlay.active{display:flex;}
+  .modal{
+    background:var(--panel-2);
+    border:1px solid var(--gold);
+    border-radius:14px;
+    padding:26px 22px;
+    max-width:360px;
+    width:100%;
+    text-align:center;
+  }
+  .modal h3{font-size:17px; margin-bottom:10px;}
+  .modal p{color:var(--text-dim); font-size:13.5px; line-height:1.5; margin-bottom:20px;}
+  .modal-actions{display:flex; gap:10px;}
+  .modal-actions button{
+    flex:1; padding:12px; border-radius:9px; border:none;
+    font-family:'Manrope', sans-serif; font-weight:700; font-size:13.5px; cursor:pointer;
+  }
+  .btn-cancel{background:transparent; border:1px solid var(--line) !important; color:var(--text-dim);}
+  .btn-confirm{background:var(--success); color:#062c17;}
+
+  /* Confeti / éxito */
+  .success-overlay{
+    position:fixed; inset:0;
+    background:rgba(4,6,20,0.92);
+    display:none;
+    align-items:center; justify-content:center;
+    flex-direction:column;
+    z-index:60;
+    text-align:center;
+  }
+  .success-overlay.active{display:flex;}
+  .success-overlay h2{
+    font-size:30px;
+    background:linear-gradient(120deg, var(--gold-light), var(--purple-light));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:10px;
+  }
+  .success-overlay p{color:var(--text-dim); font-size:14px; max-width:280px;}
+  #confetti-canvas{position:fixed; inset:0; pointer-events:none; z-index:61;}
+
+  .footer-note{
+    text-align:center; color:var(--locked); font-size:11.5px; margin-top:30px; line-height:1.6;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="wrap">
+
+  <!-- ===================== HOME ===================== -->
+  <section id="screen-home" class="screen active">
+    <div class="brand">
+      <div class="eyebrow">SENTINEL VAULT ACCESS</div>
+      <h1>BÓVEDA GTG</h1>
+      <div class="hero-gem"><img src="assets/gema-hero.jpg" alt="Gema de Guarding the Globe"></div>
+      <p>Tres recompensas exclusivas, activadas por tu Centinela personal.<br>Elige una categoría para ver lo disponible este mes.</p>
+    </div>
+
+    <div id="home-lock-banner"></div>
+
+    <button class="panel cat-btn" onclick="goTo('potenciadores')">
+      <div class="icon">⚡</div>
+      <div class="label"><strong>Potenciadores</strong><span>Progreso y gemas de la ADG</span></div>
+      <div class="arrow">›</div>
+    </button>
+
+    <button class="panel cat-btn" onclick="goTo('gemas')">
+      <div class="icon">💎</div>
+      <div class="label"><strong>Gemas</strong><span>Cofres de gemas violeta</span></div>
+      <div class="arrow">›</div>
+    </button>
+
+    <button class="panel cat-btn" onclick="goTo('fugaz')">
+      <div class="icon">🕓</div>
+      <div class="label"><strong>Oferta fugaz</strong><span>Sube tu propia propuesta</span></div>
+      <div class="arrow">›</div>
+    </button>
+
+    <p class="footer-note">Cada recompensa se puede reclamar una vez por mes.<br>La Mejor Oferta de gemas bloquea toda la bóveda hasta el mes siguiente.</p>
+  </section>
+
+  <!-- ===================== POTENCIADORES ===================== -->
+  <section id="screen-potenciadores" class="screen">
+    <button class="back-btn" onclick="goTo('home')">‹ Volver</button>
+    <div class="screen-title">Potenciadores</div>
+    <div class="screen-sub">Recompensas de 15 días para avanzar más rápido.</div>
+    <div id="pot-lock-banner"></div>
+
+    <div class="offer-grid">
+      <div class="panel offer-card">
+        <div class="img-box"><img src="assets/potenciador-progreso.jpg" alt="Potenciador de Progreso"></div>
+        <div class="body">
+          <h3>Potenciador de Progreso</h3>
+          <div class="price-row">
+            <button class="price-btn" id="btn-pot_progreso_solo" onclick="openConfirm('pot_progreso_solo')">
+              <span class="tag">Solo para ti</span>
+              <span class="amount">US$4.99</span>
+              <span class="lock-note" id="note-pot_progreso_solo"></span>
+            </button>
+            <button class="price-btn" id="btn-pot_progreso_alianza" onclick="openConfirm('pot_progreso_alianza')">
+              <span class="tag">Para ti y tu alianza</span>
+              <span class="amount">US$9.99</span>
+              <span class="lock-note" id="note-pot_progreso_alianza"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel offer-card">
+        <div class="img-box"><img src="assets/potenciador-gemas.jpg" alt="Potenciador de Gemas de la ADG"></div>
+        <div class="body">
+          <h3>Potenciador de Gemas de la ADG</h3>
+          <div class="meta"><span class="qty">Recompensas de 15 días · potencia tus gemas diarias</span></div>
+          <div class="price-row">
+            <button class="price-btn" id="btn-pot_gemas_adg" onclick="openConfirm('pot_gemas_adg')">
+              <span class="tag">Reclamar</span>
+              <span class="amount">US$9.99</span>
+              <span class="lock-note" id="note-pot_gemas_adg"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GEMAS ===================== -->
+  <section id="screen-gemas" class="screen">
+    <button class="back-btn" onclick="goTo('home')">‹ Volver</button>
+    <div class="screen-title">Gemas</div>
+    <div class="screen-sub">Cofres de gemas violeta de la ADG.</div>
+    <div id="gemas-lock-banner"></div>
+
+    <div class="panel offer-card">
+      <div class="img-box"><img src="assets/gemas-ofertas.jpg" alt="Cofres de gemas"></div>
+      <div class="body">
+        <div class="price-row">
+          <button class="price-btn" id="btn-gema_superventas" onclick="openConfirm('gema_superventas')">
+            <span class="tag">Superventas · x3,1K</span>
+            <span class="amount">US$34.99</span>
+            <span class="lock-note" id="note-gema_superventas"></span>
+          </button>
+          <button class="price-btn mega" id="btn-gema_mejor" onclick="openConfirm('gema_mejor')">
+            <span class="tag">Mejor Oferta · x9K</span>
+            <span class="amount">US$99.99</span>
+            <span class="lock-note" id="note-gema_mejor"></span>
+          </button>
+        </div>
+        <p style="font-size:11.5px;color:var(--locked);margin-top:12px;line-height:1.5;">
+          ⚠️ Reclamar la Mejor Oferta bloquea las tres categorías de la bóveda hasta el mes siguiente.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== OFERTA FUGAZ ===================== -->
+  <section id="screen-fugaz" class="screen">
+    <button class="back-btn" onclick="goTo('home')">‹ Volver</button>
+    <div class="screen-title">Oferta fugaz</div>
+    <div class="screen-sub">Una recompensa por tiempo limitado. Sube una captura de lo que se te ocurra y reclámala.</div>
+    <div id="fugaz-lock-banner"></div>
+
+    <div id="fugaz-form-wrap" class="panel offer-card">
+      <div class="body" style="padding-top:18px;">
+        <label class="upload-box" id="upload-box">
+          <span id="upload-label">📎 Toca para subir una captura (opcional)</span>
+          <input type="file" accept="image/*" id="file-input" onchange="handleFile(event)">
+        </label>
+        <img id="preview-img" class="preview-img">
+        <textarea id="fugaz-note" rows="3" placeholder="Escribe aquí de qué trata tu oferta fugaz..."></textarea>
+        <button class="primary-btn" id="btn-gema_fugaz" onclick="openConfirm('oferta_fugaz')">Reclamar oferta fugaz</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Modal de confirmación -->
+<div class="overlay" id="confirm-overlay">
+  <div class="modal">
+    <h3 id="confirm-title">¿Reclamar esta oferta?</h3>
+    <p id="confirm-text">Se avisará por correo que fue reclamada. No se puede deshacer.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmClaim()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay de éxito -->
+<div class="success-overlay" id="success-overlay">
+  <h2>¡RECLAMADO!</h2>
+  <p id="success-text">Tu recompensa fue registrada y ya está en camino.</p>
+</div>
+
+<script>
+/* ======================================================
+   👉 CONFIGURA AQUÍ TUS DATOS DE EMAILJS (emailjs.com)
+   ====================================================== */
+const EMAILJS_PUBLIC_KEY  = "TU_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID  = "TU_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID";
+const NOTIFY_EMAIL        = "invinciblegtgcupons@gmail.com";
+
+if (window.emailjs && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY") {
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+}
+
+/* ======================================================
+   DEFINICIÓN DE OFERTAS
+   ====================================================== */
+const OFFERS = {
+  pot_progreso_solo:    { category:"Potenciadores", title:"Potenciador de Progreso (Solo para ti)", price:"US$4.99" },
+  pot_progreso_alianza: { category:"Potenciadores", title:"Potenciador de Progreso (Para ti y tu alianza)", price:"US$9.99" },
+  pot_gemas_adg:        { category:"Potenciadores", title:"Potenciador de Gemas de la ADG", price:"US$9.99" },
+  gema_superventas:     { category:"Gemas", title:"Superventas x3,1K", price:"US$34.99" },
+  gema_mejor:           { category:"Gemas", title:"Mejor Oferta x9K", price:"US$99.99", megaLock:true },
+  oferta_fugaz:         { category:"Oferta fugaz", title:"Oferta fugaz", price:"—" }
+};
+
+/* ======================================================
+   ESTADO (localStorage)
+   ====================================================== */
+const STORAGE_KEY = "gtg_vault_state";
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  }catch(e){}
+  return { claims:{}, globalLockMonth:null };
+}
+function saveState(state){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function currentMonth(){
+  return new Date().toISOString().slice(0,7); // "YYYY-MM"
+}
+function nextMonthLabel(){
+  const d = new Date();
+  d.setMonth(d.getMonth()+1);
+  d.setDate(1);
+  return d.toLocaleDateString('es-ES', { day:'numeric', month:'long' });
+}
+function isOfferLocked(id){
+  const state = loadState();
+  if (state.globalLockMonth === currentMonth()) return true;
+  return state.claims[id] === currentMonth();
+}
+
+/* ======================================================
+   NAVEGACIÓN
+   ====================================================== */
+function goTo(name){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  renderLocks();
+}
+
+/* ======================================================
+   RENDER DE BLOQUEOS
+   ====================================================== */
+function renderLocks(){
+  const state = loadState();
+  const globallyLocked = state.globalLockMonth === currentMonth();
+
+  Object.keys(OFFERS).forEach(id => {
+    const btn = document.getElementById('btn-' + id);
+    const note = document.getElementById('note-' + id);
+    if (!btn) return;
+    const locked = isOfferLocked(id);
+    btn.disabled = locked;
+    if (note){
+      note.textContent = locked ? ('Vuelve el ' + nextMonthLabel()) : '';
+    }
+  });
+
+  const banner = globallyLocked
+    ? `<div class="lock-banner">🔒 Se reclamó la Mejor Oferta de gemas este mes. Toda la bóveda vuelve a abrir el ${nextMonthLabel()}.</div>`
+    : '';
+  document.getElementById('home-lock-banner').innerHTML = banner;
+  document.getElementById('pot-lock-banner').innerHTML = banner;
+  document.getElementById('gemas-lock-banner').innerHTML = banner;
+  document.getElementById('fugaz-lock-banner').innerHTML = banner;
+
+  const fugazForm = document.getElementById('fugaz-form-wrap');
+  if (fugazForm) fugazForm.style.display = (globallyLocked || isOfferLocked('oferta_fugaz')) ? 'none' : '';
+}
+
+/* ======================================================
+   SUBIDA Y COMPRESIÓN DE CAPTURA (oferta fugaz)
+   ====================================================== */
+let currentScreenshotDataUrl = "";
+
+function handleFile(evt){
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      const maxW = 700;
+      const scale = Math.min(1, maxW / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      currentScreenshotDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+
+      const preview = document.getElementById('preview-img');
+      preview.src = currentScreenshotDataUrl;
+      preview.style.display = 'block';
+
+      const box = document.getElementById('upload-box');
+      box.classList.add('has-file');
+      document.getElementById('upload-label').textContent = '✅ Captura lista — toca para cambiarla';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ======================================================
+   FLUJO DE CONFIRMACIÓN
+   ====================================================== */
+let pendingOfferId = null;
+
+function openConfirm(id){
+  if (isOfferLocked(id)) return;
+  pendingOfferId = id;
+  const offer = OFFERS[id];
+  document.getElementById('confirm-title').textContent = '¿Reclamar "' + offer.title + '"?';
+  document.getElementById('confirm-text').textContent = offer.megaLock
+    ? 'Esto bloqueará TODA la bóveda hasta el mes siguiente. No se puede deshacer.'
+    : 'Se avisará por correo que fue reclamada. No se puede deshacer.';
+  document.getElementById('confirm-overlay').classList.add('active');
+}
+function closeConfirm(){
+  document.getElementById('confirm-overlay').classList.remove('active');
+  pendingOfferId = null;
+}
+
+function confirmClaim(){
+  if (!pendingOfferId) return;
+  const id = pendingOfferId;
+  const offer = OFFERS[id];
+  const state = loadState();
+  const month = currentMonth();
+
+  state.claims[id] = month;
+  if (offer.megaLock) state.globalLockMonth = month;
+  saveState(state);
+
+  sendClaimEmail(id, offer);
+
+  document.getElementById('confirm-overlay').classList.remove('active');
+  pendingOfferId = null;
+
+  showSuccess(offer);
+  renderLocks();
+}
+
+/* ======================================================
+   ENVÍO DE CORREO (EmailJS)
+   ====================================================== */
+function sendClaimEmail(id, offer){
+  if (!window.emailjs || EMAILJS_PUBLIC_KEY === "TU_PUBLIC_KEY") {
+    console.warn("EmailJS no está configurado todavía. Revisa las variables al inicio del script.");
+    return;
+  }
+
+  const now = new Date();
+  const fecha = now.toLocaleDateString('es-ES', { day:'numeric', month:'long', year:'numeric' });
+  const hora = now.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
+
+  let extra = "";
+  if (id === 'oferta_fugaz'){
+    const nota = document.getElementById('fugaz-note').value || '(sin nota)';
+    extra += '<p><strong>Nota:</strong> ' + nota.replace(/</g,'&lt;') + '</p>';
+    if (currentScreenshotDataUrl){
+      extra += '<p><strong>Captura adjunta:</strong></p><img src="' + currentScreenshotDataUrl + '" style="max-width:100%;border-radius:8px;" />';
+    } else {
+      extra += '<p><em>No se subió ninguna captura.</em></p>';
+    }
+  }
+
+  const params = {
+    to_email: NOTIFY_EMAIL,
+    categoria: offer.category,
+    oferta: offer.title,
+    precio: offer.price,
+    fecha: fecha,
+    hora: hora,
+    extra: extra
+  };
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+    .then(() => console.log('Correo enviado ✔'))
+    .catch(err => console.error('Error enviando correo:', err));
+}
+
+/* ======================================================
+   PANTALLA DE ÉXITO + CONFETI
+   ====================================================== */
+function showSuccess(offer){
+  document.getElementById('success-text').textContent = '"' + offer.title + '" fue registrada. ¡Que la disfrutes!';
+  const overlay = document.getElementById('success-overlay');
+  overlay.classList.add('active');
+  launchConfetti();
+  setTimeout(() => {
+    overlay.classList.remove('active');
+  }, 2600);
+}
+
+/* Confeti simple en canvas, sin librerías externas */
+function launchConfetti(){
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const colors = ['#d9a441', '#f6d989', '#b93fe0', '#e9b8ff', '#57e08c'];
+  const pieces = Array.from({length: 140}, () => ({
+    x: Math.random() * canvas.width,
+    y: -20 - Math.random() * canvas.height * 0.4,
+    w: 6 + Math.random() * 6,
+    h: 8 + Math.random() * 10,
+    color: colors[Math.floor(Math.random()*colors.length)],
+    speed: 2 + Math.random() * 3,
+    drift: -1.5 + Math.random() * 3,
+    rot: Math.random() * Math.PI,
+    rotSpeed: -0.2 + Math.random() * 0.4
+  }));
+
+  let frame = 0;
+  const maxFrames = 160;
+  function tick(){
+    frame++;
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.y += p.speed;
+      p.x += p.drift;
+      p.rot += p.rotSpeed;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if (frame < maxFrames){
+      requestAnimationFrame(tick);
+    } else {
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+    }
+  }
+  tick();
+}
+
+/* ======================================================
+   HERRAMIENTAS DE PRUEBA (solo consola, no hay botón visible)
+   ====================================================== */
+window.resetVault = function(){
+  localStorage.removeItem(STORAGE_KEY);
+  currentScreenshotDataUrl = "";
+  renderLocks();
+  console.log('✅ Bóveda reiniciada. Todas las ofertas vuelven a estar disponibles.');
+};
+
+window.simulateNextMonth = function(){
+  const state = loadState();
+  const d = new Date();
+  d.setMonth(d.getMonth() - 1);
+  const fakePastMonth = d.toISOString().slice(0,7);
+  if (state.globalLockMonth) state.globalLockMonth = fakePastMonth;
+  Object.keys(state.claims).forEach(id => {
+    if (state.claims[id]) state.claims[id] = fakePastMonth;
+  });
+  saveState(state);
+  renderLocks();
+  console.log('✅ Simulado: ya pasó un mes. Revisa que todo esté desbloqueado de nuevo.');
+};
+
+window.showVaultState = function(){
+  console.log(loadState());
+};
+
+/* ======================================================
+   INICIO
+   ====================================================== */
+renderLocks();
+</script>
+
+</body>
+</html>
