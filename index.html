@@ -507,10 +507,11 @@
    ====================================================== */
 const EMAILJS_PUBLIC_KEY  = "wWq6HkQQ16oMkExhb";
 const EMAILJS_SERVICE_ID  = "service_w3fd9v8";
-const EMAILJS_TEMPLATE_ID = "template_sf1zx63";
+const EMAILJS_TEMPLATE_ID = "template_sf1zx63";       // plantilla "Compras chill" (todas las ofertas normales)
+const EMAILJS_TEMPLATE_ID_FUGAZ = "TU_TEMPLATE_FUGAZ"; // 👉 pegá acá el Template ID de la plantilla de "Oferta fugaz" cuando la crees
 const NOTIFY_EMAIL        = "invinciblegtgcupons@gmail.com";
 
-if (window.emailjs && EMAILJS_PUBLIC_KEY !== "wWq6HkQQ16oMkExhb") {
+if (window.emailjs) {
   emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 }
 
@@ -673,8 +674,8 @@ function confirmClaim(){
    ENVÍO DE CORREO (EmailJS)
    ====================================================== */
 function sendClaimEmail(id, offer){
-  if (!window.emailjs || EMAILJS_PUBLIC_KEY === "wWq6HkQQ16oMkExhb") {
-    console.warn("EmailJS no está configurado todavía. Revisa las variables al inicio del script.");
+  if (!window.emailjs) {
+    console.warn("EmailJS no cargó. Revisá tu conexión a internet o el script de EmailJS.");
     return;
   }
 
@@ -703,7 +704,9 @@ function sendClaimEmail(id, offer){
     extra: extra
   };
 
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+  const templateToUse = (id === 'oferta_fugaz') ? EMAILJS_TEMPLATE_ID_FUGAZ : EMAILJS_TEMPLATE_ID;
+
+  emailjs.send(EMAILJS_SERVICE_ID, templateToUse, params)
     .then(() => console.log('Correo enviado ✔'))
     .catch(err => console.error('Error enviando correo:', err));
 }
