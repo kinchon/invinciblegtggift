@@ -391,7 +391,7 @@
     </button>
 
     <button class="panel cat-btn" onclick="goTo('fugaz')">
-      <div class="icon"><img src="assets/icono-fugaz.png" style="width:24px;height:24px;"></div>
+      <div class="icon icon--img"><img src="assets/icono-fugaz.png" alt="Oferta fugaz"></div>
       <div class="label"><strong>Oferta fugaz</strong><span>Sube captura de la oferta</span></div>
       <div class="arrow">›</div>
     </button>
@@ -596,7 +596,7 @@ function renderLocks(){
   });
 
   const banner = globallyLocked
-   <img src="assets/icono-candado.png" style="width:16px;height:16px;vertical-align:middle;"> Se reclamó la Mejor Oferta de gemas este mes. Toda la bóveda vuelve a abrir el ${nextMonthLabel()}.</div>`
+    ? `<div class="lock-banner"><img src="assets/icono-candado.png" style="width:16px;height:16px;vertical-align:middle;"> Se reclamó la Mejor Oferta de gemas este mes. Toda la bóveda vuelve a abrir el ${nextMonthLabel()}.</div>`
     : '';
   document.getElementById('home-lock-banner').innerHTML = banner;
   document.getElementById('pot-lock-banner').innerHTML = banner;
