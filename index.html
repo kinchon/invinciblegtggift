@@ -185,6 +185,24 @@
 
   /* En celulares angostos, las 2 tarjetas de potenciadores vuelven
      a apilarse una arriba de la otra para no quedar apretadas. */
+  /* En pantallas de escritorio, los títulos, precios e imágenes de las
+     ofertas usan más espacio y texto más grande. Los botones de categoría
+     del inicio (Potenciadores/Gemas/Oferta fugaz) NO se tocan acá. */
+  @media (min-width: 700px){
+    .wrap.wrap--wide{ max-width:640px; }
+
+    .screen-title{ font-size:26px; }
+    .screen-sub{ font-size:15px; }
+
+    .offer-card .img-box{ height:260px; }
+    .offer-card .body{ padding:22px 26px 0; }
+    .offer-card h3{ font-size:19px; margin-bottom:12px; }
+
+    .price-btn{ padding:18px 14px; }
+    .price-btn .tag{ font-size:13px; }
+    .price-btn .amount{ font-size:23px; }
+  }
+
   @media (max-width: 420px){
     .offer-grid{
       flex-direction:column;
@@ -432,11 +450,6 @@
               <span class="amount">US$4.99</span>
               <span class="lock-note" id="note-pot_progreso_solo"></span>
             </button>
-            <button class="price-btn" id="btn-pot_progreso_alianza" onclick="openConfirm('pot_progreso_alianza')">
-              <span class="tag">Para ti y tu alianza</span>
-              <span class="amount">US$9.99</span>
-              <span class="lock-note" id="note-pot_progreso_alianza"></span>
-            </button>
           </div>
         </div>
       </div>
@@ -545,8 +558,7 @@ if (window.emailjs) {
    DEFINICIÓN DE OFERTAS
    ====================================================== */
 const OFFERS = {
-  pot_progreso_solo:    { category:"Potenciadores", title:"Potenciador de Progreso (Solo para ti)", price:"US$4.99" },
-  pot_progreso_alianza: { category:"Potenciadores", title:"Potenciador de Progreso (Para ti y tu alianza)", price:"US$9.99" },
+  pot_progreso_solo:    { category:"Potenciadores", title:"Potenciador de Progreso", price:"US$4.99" },
   pot_gemas_adg:        { category:"Potenciadores", title:"Potenciador de Gemas de la ADG", price:"US$9.99" },
   gema_superventas:     { category:"Gemas", title:"Superventas x3,1K", price:"US$34.99" },
   gema_mejor:           { category:"Gemas", title:"Mejor Oferta x9K", price:"US$99.99", megaLock:true },
@@ -589,6 +601,7 @@ function isOfferLocked(id){
 function goTo(name){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
+  document.querySelector('.wrap').classList.toggle('wrap--wide', name !== 'home');
   renderLocks();
 }
 
