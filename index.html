@@ -354,7 +354,22 @@
     margin-bottom:10px;
   }
   .success-overlay p{color:var(--text-dim); font-size:14px; max-width:280px;}
-  #confetti-canvas{position:fixed; inset:0; pointer-events:none; z-index:61;}
+  .particle-box{position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:61;}
+  .particle{
+    position:absolute;
+    top:-15%;
+    opacity:0;
+    animation-name:fall;
+    animation-timing-function:linear;
+    animation-fill-mode:forwards;
+    pointer-events:none;
+  }
+  @keyframes fall{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    8%{ opacity:0.95; }
+    92%{ opacity:0.9; }
+    100%{ transform:translateY(115vh) translateX(var(--drift)) rotate(var(--spin)); opacity:0; }
+  }
 
   .footer-note{
     text-align:center; color:var(--locked); font-size:11.5px; margin-top:30px; line-height:1.6;
@@ -363,7 +378,7 @@
 </head>
 <body>
 
-<canvas id="confetti-canvas"></canvas>
+<div class="particle-box" id="particle-box"></div>
 
 <div class="wrap">
 
@@ -729,54 +744,62 @@ function showSuccess(offer){
   document.getElementById('success-text').textContent = '"' + offer.title + '" fue registrada. ¡Que la disfrutes!';
   const overlay = document.getElementById('success-overlay');
   overlay.classList.add('active');
-  launchConfetti();
+  launchIconRain();
   setTimeout(() => {
     overlay.classList.remove('active');
-  }, 2600);
+  }, 6000);
 }
 
-/* Confeti simple en canvas, sin librerías externas */
-function launchConfetti(){
-  const canvas = document.getElementById('confetti-canvas');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const ctx = canvas.getContext('2d');
-  const colors = ['#d9a441', '#f6d989', '#b93fe0', '#e9b8ff', '#57e08c'];
-  const pieces = Array.from({length: 140}, () => ({
-    x: Math.random() * canvas.width,
-    y: -20 - Math.random() * canvas.height * 0.4,
-    w: 6 + Math.random() * 6,
-    h: 8 + Math.random() * 10,
-    color: colors[Math.floor(Math.random()*colors.length)],
-    speed: 2 + Math.random() * 3,
-    drift: -1.5 + Math.random() * 3,
-    rot: Math.random() * Math.PI,
-    rotSpeed: -0.2 + Math.random() * 0.4
-  }));
+/* ======================================================
+   LLUVIA DE ÍCONOS (reemplaza al confeti)
+   ====================================================== */
+const RAIN_ICONS = [
+  'assets/icono-sc.webp', 'assets/icono-sc.webp', 'assets/icono-sc.webp',
+  'assets/icono-gema-verde.webp', 'assets/icono-gema-verde.webp', 'assets/icono-gema-verde.webp',
+  'assets/icono-ticket.webp',
+  'assets/icono-vial-azul.webp',
+  'assets/icono-vial-rosa.webp',
+  'assets/icono-xp-magenta.webp',
+  'assets/icono-xp-celeste.webp'
+];
+const RAIN_TOTAL_DURATION = 6;   // segundos, igual al tiempo del overlay de arriba
+const RAIN_PARTICLE_COUNT = 70;
+const RAIN_MIN_SIZE = 22;
+const RAIN_MAX_SIZE = 44;
+const RAIN_MIN_FALL = 3.2;
+const RAIN_MAX_FALL = 4.6;
 
-  let frame = 0;
-  const maxFrames = 160;
-  function tick(){
-    frame++;
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    pieces.forEach(p => {
-      p.y += p.speed;
-      p.x += p.drift;
-      p.rot += p.rotSpeed;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
-      ctx.restore();
-    });
-    if (frame < maxFrames){
-      requestAnimationFrame(tick);
-    } else {
-      ctx.clearRect(0,0,canvas.width, canvas.height);
-    }
+function rainRand(min, max){ return min + Math.random() * (max - min); }
+
+function launchIconRain(){
+  const box = document.getElementById('particle-box');
+  box.innerHTML = '';
+  const columnWidth = 100 / RAIN_PARTICLE_COUNT;
+
+  for (let i = 0; i < RAIN_PARTICLE_COUNT; i++){
+    const img = document.createElement('img');
+    img.src = RAIN_ICONS[Math.floor(Math.random() * RAIN_ICONS.length)];
+    img.className = 'particle';
+
+    const size = rainRand(RAIN_MIN_SIZE, RAIN_MAX_SIZE);
+    img.style.width = size + 'px';
+
+    const colStart = i * columnWidth;
+    img.style.left = rainRand(colStart - columnWidth * 0.4, colStart + columnWidth * 1.4) + '%';
+
+    const fallDuration = rainRand(RAIN_MIN_FALL, RAIN_MAX_FALL);
+    const maxStart = Math.max(0, RAIN_TOTAL_DURATION - fallDuration);
+    const startDelay = rainRand(0, maxStart);
+
+    img.style.animationDuration = fallDuration + 's';
+    img.style.animationDelay = startDelay + 's';
+    img.style.setProperty('--drift', rainRand(-50, 50) + 'px');
+    img.style.setProperty('--spin', rainRand(180, 720) + 'deg');
+
+    box.appendChild(img);
   }
-  tick();
+
+  setTimeout(() => { box.innerHTML = ''; }, (RAIN_TOTAL_DURATION + 0.5) * 1000);
 }
 
 /* ======================================================
