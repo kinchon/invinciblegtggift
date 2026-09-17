@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Bóveda GTG">
 <meta name="theme-color" content="#070a1f">
+<meta name="color-scheme" content="dark">
+<link rel="manifest" href="manifest.json">
 <title>Bóveda GTG</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/chest-open-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/chest-open-16.png">
@@ -39,7 +41,13 @@
     background:var(--bg-deep);
     height:100%;
     overscroll-behavior-y:none;
+    scrollbar-color:var(--line) var(--bg-deep); /* Firefox */
   }
+
+  ::-webkit-scrollbar{ width:12px; height:12px; }
+  ::-webkit-scrollbar-track{ background:var(--bg-deep); }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; border:3px solid var(--bg-deep); }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--gold); }
 
   body{
     margin:0;

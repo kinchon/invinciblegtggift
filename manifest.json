@@ -1,0 +1,37 @@
+{
+  "name": "Bóveda GTG",
+  "short_name": "Bóveda GTG",
+  "description": "Recompensas exclusivas de Guarding the Globe",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070a1f",
+  "theme_color": "#070a1f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/chest-open-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/chest-open-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/chest-open-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/chest-open-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
