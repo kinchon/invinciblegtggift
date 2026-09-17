@@ -194,7 +194,6 @@
     .screen-title{ font-size:26px; }
     .screen-sub{ font-size:15px; }
 
-    .offer-card .img-box{ height:260px; }
     .offer-card .body{ padding:22px 26px 0; }
     .offer-card h3{ font-size:19px; margin-bottom:12px; }
 
@@ -218,13 +217,18 @@
      o achicar el recuadro; el ancho siempre es el 100% de la tarjeta. */
   .offer-card .img-box{
     width:100%;
-    height:180px;
+    height:180px; /* usado por la tarjeta de Gemas */
     background:var(--bg-deep-2);
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
     border-bottom:1px solid var(--line);
+  }
+  /* Las tarjetas de Potenciadores usan imágenes 1080x1350 (4:5) */
+  #screen-potenciadores .img-box{
+    height:auto;
+    aspect-ratio:1080 / 1350;
   }
   .offer-card .img-box img{
     width:100%;
