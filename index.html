@@ -230,6 +230,17 @@
     height:auto;
     aspect-ratio:1080 / 1350;
   }
+  /* La tarjeta de Gemas usa una imagen 10:3 (ej. 1800x540) — con
+     aspect-ratio en vez de altura fija, la caja siempre tiene esa
+     misma forma sin importar el ancho de pantalla, así la imagen
+     llena la caja completa (borde a borde) en mobile y escritorio. */
+  #screen-gemas .img-box{
+    height:auto;
+    aspect-ratio:10 / 3;
+  }
+  #screen-gemas .img-box img{
+    object-fit:cover;
+  }
   .offer-card .img-box img{
     width:100%;
     height:100%;
@@ -450,10 +461,9 @@
 
     <div class="offer-grid">
       <div class="panel offer-card">
-        <div class="img-box"><img src="assets/potenciadores-ops-card.png" alt="Potenciador de Progreso"></div>
+        <div class="img-box"><img src="assets/potenciador-progreso.jpg" alt="Potenciador de Progreso"></div>
         <div class="body">
           <h3>Potenciador de Progreso</h3>
-          <div class="meta"><span class="qty">Recompensas de 15 días · potencia tus recompensas de las Ops. de ADG</span></div>
           <div class="price-row">
             <button class="price-btn" id="btn-pot_progreso_solo" onclick="openConfirm('pot_progreso_solo')">
               <span class="tag">Solo para ti</span>
@@ -465,7 +475,7 @@
       </div>
 
       <div class="panel offer-card">
-        <div class="img-box"><img src="assets/potenciadores-gems-card.png" alt="Potenciador de Gemas de la ADG"></div>
+        <div class="img-box"><img src="assets/potenciador-gemas.jpg" alt="Potenciador de Gemas de la ADG"></div>
         <div class="body">
           <h3>Potenciador de Gemas de la ADG</h3>
           <div class="meta"><span class="qty">Recompensas de 15 días · potencia tus gemas diarias</span></div>
