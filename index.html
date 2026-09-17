@@ -2,7 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bóveda GTG">
+<meta name="theme-color" content="#070a1f">
 <title>Bóveda GTG</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/chest-open-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/chest-open-16.png">
@@ -30,9 +35,15 @@
 
   *{box-sizing:border-box;}
 
+  html{
+    background:var(--bg-deep);
+    height:100%;
+    overscroll-behavior-y:none;
+  }
+
   body{
     margin:0;
-    min-height:100vh;
+    min-height:100%;
     background:
       radial-gradient(ellipse at 50% -10%, rgba(185,63,224,0.25), transparent 60%),
       radial-gradient(ellipse at 90% 100%, rgba(217,164,65,0.12), transparent 55%),
@@ -42,6 +53,7 @@
     font-family:'Manrope', sans-serif;
     padding:0 0 60px;
     -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
   }
 
   .wrap{max-width:480px; margin:0 auto; padding:28px 20px;}
