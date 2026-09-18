@@ -59,7 +59,7 @@
     background-attachment:fixed;
     color:var(--text);
     font-family:'Manrope', sans-serif;
-    padding:0 0 60px;
+    padding:max(20px, env(safe-area-inset-top)) 0 max(60px, calc(env(safe-area-inset-bottom) + 20px));
     -webkit-font-smoothing:antialiased;
     overscroll-behavior-y:none;
   }
