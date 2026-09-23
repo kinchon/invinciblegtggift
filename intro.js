@@ -151,4 +151,16 @@
     startIntro();
   }
 
+  /* ---------- 5) Herramienta de prueba (solo consola, no hay botón visible) ---------- */
+  window.resetIntro = function(){
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+    console.log('✅ Intro reiniciada. Recargá la página (F5) para verla de nuevo.');
+  };
+
+  window.showIntroState = function(){
+    let v = null;
+    try { v = localStorage.getItem(STORAGE_KEY); } catch(e){}
+    console.log('Última vez que se mostró la intro:', v || '(nunca)');
+  };
+
 })();
