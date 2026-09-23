@@ -21,8 +21,22 @@
   let lastShown = null;
   try { lastShown = localStorage.getItem(STORAGE_KEY); } catch(e){}
 
+  /* Estas dos funciones se definen SIEMPRE, incluso si la intro no se
+     va a mostrar hoy — si no, resetIntro() nunca llegaría a existir
+     el mismo día en que ya se vio, que es justo cuando más falta hace. */
+  window.resetIntro = function(){
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+    console.log('✅ Intro reiniciada. Recargá la página (F5) para verla de nuevo.');
+  };
+
+  window.showIntroState = function(){
+    let v = null;
+    try { v = localStorage.getItem(STORAGE_KEY); } catch(e){}
+    console.log('Última vez que se mostró la intro:', v || '(nunca)');
+  };
+
   if (lastShown === today) {
-    return; // ya se vio hoy, no hacer nada
+    return; // ya se vio hoy, no hacer nada más
   }
 
   /* ---------- 2) Estilos (con prefijo gtgintro- para no chocar con el resto) ---------- */
@@ -150,17 +164,5 @@
   } else {
     startIntro();
   }
-
-  /* ---------- 5) Herramienta de prueba (solo consola, no hay botón visible) ---------- */
-  window.resetIntro = function(){
-    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
-    console.log('✅ Intro reiniciada. Recargá la página (F5) para verla de nuevo.');
-  };
-
-  window.showIntroState = function(){
-    let v = null;
-    try { v = localStorage.getItem(STORAGE_KEY); } catch(e){}
-    console.log('Última vez que se mostró la intro:', v || '(nunca)');
-  };
 
 })();
